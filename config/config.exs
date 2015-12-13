@@ -30,7 +30,7 @@ use Mix.Config
 #     import_config "#{Mix.env}.exs"
 
 config :wwwest,
-	server_port: 9868,
+	server_port: 8887,
 	server_timeout: 120000, # timeout for all requests
 	memo_ttl: 60000, # timeout for memorize json encode and decode
 	trx_ttl: 3600000, # timeout for all trx transactions

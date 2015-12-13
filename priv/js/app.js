@@ -13168,14 +13168,11 @@ constants = {
         {
           val: "main_page",
           lab: "данные"
-        }, {
-          val: "opts",
-          lab: "опции"
         }
       ],
       sidebar: false,
       showing_block: "main_page",
-      version: '0.0.1.3'
+      version: '0.0.1.147'
     };
   },
   colors: function() {
@@ -13189,14 +13186,26 @@ constants = {
 
 init_state = {
   data: {
-    foo: true,
-    cache: {}
+    grep_app: "",
+    grep_log: "",
+    cache: {
+      stack: []
+    }
   },
   handlers: {
+    grep: function(content, selector) {
+      if (selector) {
+        return content.indexOf(selector) > -1;
+      } else {
+        return true;
+      }
+    },
     change_from_view: function(path, ev) {
+      var tmp;
       if ((ev != null) && (ev.target != null) && (ev.target.value != null)) {
+        tmp = ev.target.value;
         return actor.cast(function(state) {
-          return Imuta.put_in(state, path, ev.target.value);
+          return Imuta.put_in(state, path, tmp);
         });
       }
     },
@@ -13288,8 +13297,10 @@ widget = require("widget");
 domelement = null;
 
 do_render = function() {
-  if (domelement != null) {
-    return React.render(widget(actor.get()), domelement);
+  var this_state;
+  this_state = actor.get();
+  if (this_state && domelement) {
+    return React.render(widget(this_state), domelement);
   }
 };
 
@@ -13363,6 +13374,14 @@ document.addEventListener("DOMContentLoaded", function(e) {
         return warn(content);
       case "notice":
         return notice(content);
+      case "message":
+        return actor.cast(function(state) {
+          if (state.handlers.grep(content.app, state.data.grep_app) && state.handlers.grep(content.message, state.data.grep_log)) {
+            content.date = Date();
+            state.data.cache.stack.unshift(content);
+          }
+          return state;
+        });
       default:
         return alert("subject : " + subject + " | content : " + content);
     }
@@ -13376,7 +13395,7 @@ module.exports = (function (React) {
   var fn = function(locals) {
     var tags = [];
     var locals_for_with = locals || {};
-    (function(Imuta, Object) {
+    (function(Object, visibility) {
       function jade_join_classes(val) {
         return (Array.isArray(val) ? val.map(jade_join_classes) : val && "object" == typeof val ? Object.keys(val).filter(function(key) {
           return val[key];
@@ -13384,142 +13403,73 @@ module.exports = (function (React) {
           return null != val && "" !== val;
         }).join(" ");
       }
-      var jade_mixins = {};
       var jade_interp;
-      jade_mixins.opts_button_input = function(jade_mixin_options, lab, path) {
-        jade_mixin_options && jade_mixin_options.block, jade_mixin_options && jade_mixin_options.attributes || {};
-        var tags = [];
-        Imuta.get_in(locals, path) ? tags.push(React.createElement("button", {
-          type: "button",
-          onClick: (jade_interp = locals.handlers, jade_interp.change_from_view_swap.bind(jade_interp, path)),
-          className: "btn btn-success fill"
-        }, lab)) : tags.push(React.createElement("button", {
-          type: "button",
-          onClick: (jade_interp = locals.handlers, jade_interp.change_from_view_swap.bind(jade_interp, path)),
-          className: "btn btn-default fill"
-        }, lab));
-        return tags;
-      };
-      jade_mixins.sidebar = function(jade_mixin_options, visibility) {
-        jade_mixin_options && jade_mixin_options.block, jade_mixin_options && jade_mixin_options.attributes || {};
-        var tags = [];
-        tags.push(React.createElement("div", {
-          className: jade_join_classes([ "navbar", "navbar-default", "sidebar", "transparent", "ontop", visibility ])
-        }, React.createElement("div", {
-          className: "container-fluid padded"
-        }, React.createElement("div", {
-          className: "row"
-        }, React.createElement("div", {
-          className: "col-md-12"
-        }, React.createElement("div", {
-          role: "group",
-          className: "btn-group fill"
-        }, React.createElement("button", {
-          type: "button",
-          onClick: (jade_interp = locals.handlers, jade_interp.save_opts.bind(jade_interp)),
-          className: "btn btn-warning fill50"
-        }, "сохранить опции"), React.createElement("button", {
-          type: "button",
-          onClick: (jade_interp = locals.handlers, jade_interp.reset_opts.bind(jade_interp)),
-          className: "btn btn-danger fill50"
-        }, "сбросить опции")))))));
-        return tags;
-      };
-      jade_mixins.make_main_block = function(jade_mixin_options, blo, visibility) {
-        jade_mixin_options && jade_mixin_options.block, jade_mixin_options && jade_mixin_options.attributes || {};
-        var tags = [];
-        tags.push(React.createElement.apply(React, [ "div", {
-          className: jade_join_classes([ "container-fluid", "padded", visibility ])
-        } ].concat(function() {
-          var tags = [];
-          "main_page" == blo.val ? tags.push(React.createElement("div", {
-            className: "row"
-          }, React.createElement.apply(React, [ "div", {
-            className: "col-md-12"
-          } ].concat(function() {
-            var tags = [];
-            tags.push(React.createElement("h4", {}, blo.lab));
-            tags = tags.concat(jade_mixins.opts_button_input.call(this, {}, "hello", [ "data", "foo" ]));
-            return tags;
-          }.call(this))))) : "opts" == blo.val && tags.push(React.createElement("div", {
-            className: "row"
-          }, React.createElement("div", {
-            className: "col-md-12"
-          }, React.createElement("h4", {}, blo.lab))));
-          return tags;
-        }.call(this))));
-        return tags;
-      };
       //
       //	page content
       //
       tags.push(React.createElement("div", {
         className: "row"
       }, React.createElement("nav", {
-        className: "navbar navbar-default navbar-fixed-top transparent"
-      }, React.createElement.apply(React, [ "div", {
+        className: "navbar navbar-default navbar-fixed-top transparent black"
+      }, React.createElement("div", {
         role: "group",
         className: "padded_left btn-group"
-      } ].concat(function() {
-        var tags = [];
-        tags = tags.concat(jade_mixins.opts_button_input.call(this, {}, "инструменты", [ "opts", "sidebar" ]));
-        return tags;
-      }.call(this))), React.createElement("div", {
+      }, React.createElement("input", {
+        type: "text",
+        placeholder: "фильтр приложений",
+        onChange: (jade_interp = locals.handlers, jade_interp.change_from_view.bind(jade_interp, [ "data", "grep_app" ])),
+        className: "form-control fill black"
+      })), React.createElement("div", {
         role: "group",
         className: "padded_left btn-group"
-      }, function() {
-        var tags = [];
-        var $$obj = locals.opts.blocks;
-        if ("number" == typeof $$obj.length) for (var $index = 0, $$l = $$obj.length; $$l > $index; $index++) {
-          var blo = $$obj[$index];
-          locals.opts.showing_block == blo.val ? tags.push(React.createElement("button", {
-            type: "button",
-            onClick: (jade_interp = locals.handlers, jade_interp.show_block.bind(jade_interp, blo.val)),
-            className: "btn btn-success navbar-btn"
-          }, blo.lab)) : tags.push(React.createElement("button", {
-            type: "button",
-            onClick: (jade_interp = locals.handlers, jade_interp.show_block.bind(jade_interp, blo.val)),
-            className: "btn btn-default navbar-btn"
-          }, blo.lab));
-        } else {
-          var $$l = 0;
-          for (var $index in $$obj) {
-            $$l++;
-            var blo = $$obj[$index];
-            locals.opts.showing_block == blo.val ? tags.push(React.createElement("button", {
-              type: "button",
-              onClick: (jade_interp = locals.handlers, jade_interp.show_block.bind(jade_interp, blo.val)),
-              className: "btn btn-success navbar-btn"
-            }, blo.lab)) : tags.push(React.createElement("button", {
-              type: "button",
-              onClick: (jade_interp = locals.handlers, jade_interp.show_block.bind(jade_interp, blo.val)),
-              className: "btn btn-default navbar-btn"
-            }, blo.lab));
-          }
-        }
-        return tags;
-      }.call(this)), React.createElement("div", {
+      }, React.createElement("input", {
+        type: "text",
+        placeholder: "фильтр сообщений",
+        onChange: (jade_interp = locals.handlers, jade_interp.change_from_view.bind(jade_interp, [ "data", "grep_log" ])),
+        className: "form-control fill black"
+      })), React.createElement("div", {
         role: "group",
         className: "padded_left btn-group"
       }, React.createElement("div", {}, "версия : " + locals.opts.version), React.createElement("div", {}, "доступна : " + locals.handlers.get_last_version())))));
-      locals.opts.sidebar ? tags = tags.concat(jade_mixins.sidebar.call(this, {}, "visible")) : tags = tags.concat(jade_mixins.sidebar.call(this, {}, "hidden"));
-      tags.push(function() {
+      tags.push(React.createElement("div", {
+        className: jade_join_classes([ "container-fluid", "padded", visibility ])
+      }, function() {
         var tags = [];
-        var $$obj = locals.opts.blocks;
+        var $$obj = locals.data.cache.stack;
         if ("number" == typeof $$obj.length) for (var $index = 0, $$l = $$obj.length; $$l > $index; $index++) {
-          var blo = $$obj[$index];
-          tags = locals.opts.showing_block == blo.val ? tags.concat(jade_mixins.make_main_block.call(this, {}, blo, "visible")) : tags.concat(jade_mixins.make_main_block.call(this, {}, blo, "hidden"));
+          var row = $$obj[$index];
+          tags.push(React.createElement("div", {
+            className: jade_join_classes([ "row", row.color ])
+          }, React.createElement("div", {
+            className: "col-md-12"
+          }, React.createElement("div", {
+            className: "inline"
+          }, React.createElement("p", {}, row.app)), React.createElement("div", {
+            className: "padded_left_wide inline"
+          }, React.createElement("p", {}, row.date)), React.createElement("div", {
+            className: "padded_left_wide inline"
+          }, React.createElement("p", {}, row.message)))));
         } else {
           var $$l = 0;
           for (var $index in $$obj) {
             $$l++;
-            var blo = $$obj[$index];
-            tags = locals.opts.showing_block == blo.val ? tags.concat(jade_mixins.make_main_block.call(this, {}, blo, "visible")) : tags.concat(jade_mixins.make_main_block.call(this, {}, blo, "hidden"));
+            var row = $$obj[$index];
+            tags.push(React.createElement("div", {
+              className: jade_join_classes([ "row", row.color ])
+            }, React.createElement("div", {
+              className: "col-md-12"
+            }, React.createElement("div", {
+              className: "inline"
+            }, React.createElement("p", {}, row.app)), React.createElement("div", {
+              className: "padded_left_wide inline"
+            }, React.createElement("p", {}, row.date)), React.createElement("div", {
+              className: "padded_left_wide inline"
+            }, React.createElement("p", {}, row.message)))));
           }
         }
         return tags;
-      }.call(this));
-    }).call(this, "Imuta" in locals_for_with ? locals_for_with.Imuta : typeof Imuta !== "undefined" ? Imuta : undefined, "Object" in locals_for_with ? locals_for_with.Object : typeof Object !== "undefined" ? Object : undefined);
+      }.call(this)));
+    }).call(this, "Object" in locals_for_with ? locals_for_with.Object : typeof Object !== "undefined" ? Object : undefined, "visibility" in locals_for_with ? locals_for_with.visibility : typeof visibility !== "undefined" ? visibility : undefined);
     if (tags.length === 1 && !Array.isArray(tags[0])) {
       return tags.pop();
     }

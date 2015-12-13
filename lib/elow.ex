@@ -17,4 +17,9 @@ defmodule Elow do
 		opts = [strategy: :one_for_one, name: Elow.Supervisor]
 		Supervisor.start_link(children, opts)
 	end
+
+	defstruct 	app: nil,
+				message: nil,
+				color: nil
+
 end

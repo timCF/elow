@@ -3,7 +3,7 @@
 #
 constants =
 	default_opts: () -> {
-		blocks: [{val: "main_page", lab: "данные"},{val: "opts", lab: "опции"}]
+		blocks: [{val: "main_page", lab: "данные"}]
 		sidebar: false
 		showing_block: "main_page"
 		version: '__VERSION__'
@@ -14,17 +14,28 @@ constants =
 #
 init_state =
 	data: {
-		foo: true
-		cache: {}
+		grep_app: "",
+		grep_log: "",
+		cache: {
+			stack: []
+		}
 	}
 	handlers: {
 		#
 		#	app local handlers
 		#
+		grep: (content,selector) ->
+			if selector
+				content.indexOf(selector) > -1
+			else
+				true
 		#
 		#	some main-purpose handlers
 		#
-		change_from_view: (path, ev) -> if (ev? and ev.target? and ev.target.value?) then actor.cast( (state) -> Imuta.put_in(state, path, ev.target.value) )
+		change_from_view: (path, ev) ->
+			if (ev? and ev.target? and ev.target.value?)
+				tmp = ev.target.value
+				actor.cast( (state) -> Imuta.put_in(state, path, tmp) )
 		change_from_view_swap: (path) -> actor.cast( (state) -> Imuta.update_in(state, path, (bool) -> not(bool)) )
 		show_block: (some) -> actor.cast( (state) -> (state.opts.showing_block = some) ; state )
 		#
@@ -81,7 +92,9 @@ to_server = (subject, content) ->
 #
 widget = require("widget")
 domelement    = null
-do_render = () -> React.render(widget(actor.get()), domelement) if domelement?
+do_render = () ->
+	this_state = actor.get()
+	if this_state and domelement then React.render(widget(this_state), domelement)
 render_process = () ->
 	try
 		do_render()
@@ -118,4 +131,11 @@ document.addEventListener "DOMContentLoaded", (e) ->
 			when "error" then error(content)
 			when "warn" then warn(content)
 			when "notice" then notice(content)
-			else alert("subject : "+subject+" | content : "+content)
+			when "message"
+				actor.cast((state) ->
+					if (state.handlers.grep(content.app,state.data.grep_app) and state.handlers.grep(content.message,state.data.grep_log))
+						content.date = Date()
+						state.data.cache.stack.unshift(content)
+					state)
+			else
+				alert("subject : "+subject+" | content : "+content)

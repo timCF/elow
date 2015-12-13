@@ -6672,11 +6672,10 @@ button.close {
 
 
 
-html {
-  overflow: hidden; }
-
 body {
-  padding-top: 70px; }
+  padding-top: 70px;
+  background-color: black;
+  color: #A6F5B0; }
 
 input {
   height: 34px; }
@@ -6724,4 +6723,19 @@ input {
 
 .black {
   background-color: black; }
+
+.inline {
+  display: inline-block; }
+
+.red {
+  color: red; }
+
+.white {
+  color: #A6F5B0; }
+
+.yellow {
+  color: yellow; }
+
+.padded_left_wide {
+  padding-left: 25px; }
 
