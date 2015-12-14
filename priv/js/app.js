@@ -13172,7 +13172,7 @@ constants = {
       ],
       sidebar: false,
       showing_block: "main_page",
-      version: '0.0.1.149'
+      version: '0.0.1.153'
     };
   },
   colors: function() {
@@ -13438,7 +13438,9 @@ module.exports = (function (React) {
         var $$obj = locals.data.cache.stack;
         if ("number" == typeof $$obj.length) for (var $index = 0, $$l = $$obj.length; $$l > $index; $index++) {
           var row = $$obj[$index];
-          tags.push(React.createElement("div", {
+          "pre" == row.color ? tags.push(React.createElement("pre", {
+            className: "black white"
+          }, row.app + "\n" + row.date + "\n\n" + row.message)) : tags.push(React.createElement("div", {
             className: jade_join_classes([ "row", row.color ])
           }, React.createElement("div", {
             className: "col-md-12"
@@ -13454,7 +13456,9 @@ module.exports = (function (React) {
           for (var $index in $$obj) {
             $$l++;
             var row = $$obj[$index];
-            tags.push(React.createElement("div", {
+            "pre" == row.color ? tags.push(React.createElement("pre", {
+              className: "black white"
+            }, row.app + "\n" + row.date + "\n\n" + row.message)) : tags.push(React.createElement("div", {
               className: jade_join_classes([ "row", row.color ])
             }, React.createElement("div", {
               className: "col-md-12"

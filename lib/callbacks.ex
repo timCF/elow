@@ -1,6 +1,6 @@
 defmodule Elow.Wwwest do
 	use Silverb, [
-		{"@colors", ["white","red","yellow"]}
+		{"@colors", ["white","red","yellow","pre"]}
 	]
 	require Wwwest
 	Wwwest.callback_module do

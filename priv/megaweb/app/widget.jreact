@@ -23,11 +23,14 @@ div.row
 			div= "доступна : "+locals.handlers.get_last_version()
 div.container-fluid.padded(class=visibility)
 	each row in locals.data.cache.stack
-		div.row(class= row.color)
-			div.col-md-12
-				div.inline
-					p= row.app
-				div.padded_left_wide.inline
-					p= row.date
-				div.padded_left_wide.inline
-					p= row.message
+		if row.color == "pre"
+			pre.black.white= row.app+"\n"+row.date+"\n\n"+row.message
+		else
+			div.row(class= row.color)
+				div.col-md-12
+					div.inline
+						p= row.app
+					div.padded_left_wide.inline
+						p= row.date
+					div.padded_left_wide.inline
+						p= row.message
