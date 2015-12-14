@@ -13172,7 +13172,7 @@ constants = {
       ],
       sidebar: false,
       showing_block: "main_page",
-      version: '0.0.1.153'
+      version: '0.0.1.156'
     };
   },
   colors: function() {
@@ -13186,6 +13186,7 @@ constants = {
 
 init_state = {
   data: {
+    logging: true,
     grep_app: "",
     grep_log: "",
     cache: {
@@ -13376,7 +13377,7 @@ document.addEventListener("DOMContentLoaded", function(e) {
         return notice(content);
       case "message":
         return actor.cast(function(state) {
-          if (state.handlers.grep(content.app, state.data.grep_app) && state.handlers.grep(content.message, state.data.grep_log)) {
+          if (state.data.logging && state.handlers.grep(content.app, state.data.grep_app) && state.handlers.grep(content.message, state.data.grep_log)) {
             content.date = Date();
             state.data.cache.stack.unshift(content);
           }
@@ -13395,7 +13396,7 @@ module.exports = (function (React) {
   var fn = function(locals) {
     var tags = [];
     var locals_for_with = locals || {};
-    (function(Object, visibility) {
+    (function(Imuta, Object, visibility) {
       function jade_join_classes(val) {
         return (Array.isArray(val) ? val.map(jade_join_classes) : val && "object" == typeof val ? Object.keys(val).filter(function(key) {
           return val[key];
@@ -13403,7 +13404,22 @@ module.exports = (function (React) {
           return null != val && "" !== val;
         }).join(" ");
       }
+      var jade_mixins = {};
       var jade_interp;
+      jade_mixins.opts_button_input = function(jade_mixin_options, lab, path) {
+        jade_mixin_options && jade_mixin_options.block, jade_mixin_options && jade_mixin_options.attributes || {};
+        var tags = [];
+        Imuta.get_in(locals, path) ? tags.push(React.createElement("button", {
+          type: "button",
+          onClick: (jade_interp = locals.handlers, jade_interp.change_from_view_swap.bind(jade_interp, path)),
+          className: "btn btn-success fill"
+        }, lab)) : tags.push(React.createElement("button", {
+          type: "button",
+          onClick: (jade_interp = locals.handlers, jade_interp.change_from_view_swap.bind(jade_interp, path)),
+          className: "btn btn-default fill"
+        }, lab));
+        return tags;
+      };
       //
       //	page content
       //
@@ -13418,7 +13434,7 @@ module.exports = (function (React) {
         type: "text",
         placeholder: "фильтр приложений",
         onChange: (jade_interp = locals.handlers, jade_interp.change_from_view.bind(jade_interp, [ "data", "grep_app" ])),
-        className: "form-control fill black"
+        className: "form-control fill black white"
       })), React.createElement("div", {
         role: "group",
         className: "padded_left btn-group"
@@ -13426,8 +13442,15 @@ module.exports = (function (React) {
         type: "text",
         placeholder: "фильтр сообщений",
         onChange: (jade_interp = locals.handlers, jade_interp.change_from_view.bind(jade_interp, [ "data", "grep_log" ])),
-        className: "form-control fill black"
-      })), React.createElement("div", {
+        className: "form-control fill black white"
+      })), React.createElement.apply(React, [ "div", {
+        role: "group",
+        className: "padded_left btn-group"
+      } ].concat(function() {
+        var tags = [];
+        tags = tags.concat(jade_mixins.opts_button_input.call(this, {}, "логгирование", [ "data", "logging" ]));
+        return tags;
+      }.call(this))), React.createElement("div", {
         role: "group",
         className: "padded_left btn-group"
       }, React.createElement("div", {}, "версия : " + locals.opts.version), React.createElement("div", {}, "доступна : " + locals.handlers.get_last_version())))));
@@ -13473,7 +13496,7 @@ module.exports = (function (React) {
         }
         return tags;
       }.call(this)));
-    }).call(this, "Object" in locals_for_with ? locals_for_with.Object : typeof Object !== "undefined" ? Object : undefined, "visibility" in locals_for_with ? locals_for_with.visibility : typeof visibility !== "undefined" ? visibility : undefined);
+    }).call(this, "Imuta" in locals_for_with ? locals_for_with.Imuta : typeof Imuta !== "undefined" ? Imuta : undefined, "Object" in locals_for_with ? locals_for_with.Object : typeof Object !== "undefined" ? Object : undefined, "visibility" in locals_for_with ? locals_for_with.visibility : typeof visibility !== "undefined" ? visibility : undefined);
     if (tags.length === 1 && !Array.isArray(tags[0])) {
       return tags.pop();
     }

@@ -15,9 +15,11 @@ mixin opts_button_input(lab, path)
 div.row
 	nav.navbar.navbar-default.navbar-fixed-top.transparent.black
 		div.padded_left(class="btn-group" role="group")
-			input.form-control.fill.black(type="text" placeholder="фильтр приложений" onChange=locals.handlers.change_from_view(["data","grep_app"]))
+			input.form-control.fill.black.white(type="text" placeholder="фильтр приложений" onChange=locals.handlers.change_from_view(["data","grep_app"]))
 		div.padded_left(class="btn-group" role="group")
-			input.form-control.fill.black(type="text" placeholder="фильтр сообщений" onChange=locals.handlers.change_from_view(["data","grep_log"]))
+			input.form-control.fill.black.white(type="text" placeholder="фильтр сообщений" onChange=locals.handlers.change_from_view(["data","grep_log"]))
+		div.padded_left(class="btn-group" role="group")
+			+opts_button_input("логгирование", ["data","logging"])
 		div.padded_left(class="btn-group" role="group")
 			div= "версия : "+locals.opts.version
 			div= "доступна : "+locals.handlers.get_last_version()

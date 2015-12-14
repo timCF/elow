@@ -14,6 +14,7 @@ constants =
 #
 init_state =
 	data: {
+		logging: true,
 		grep_app: "",
 		grep_log: "",
 		cache: {
@@ -133,7 +134,7 @@ document.addEventListener "DOMContentLoaded", (e) ->
 			when "notice" then notice(content)
 			when "message"
 				actor.cast((state) ->
-					if (state.handlers.grep(content.app,state.data.grep_app) and state.handlers.grep(content.message,state.data.grep_log))
+					if (state.data.logging and state.handlers.grep(content.app,state.data.grep_app) and state.handlers.grep(content.message,state.data.grep_log))
 						content.date = Date()
 						state.data.cache.stack.unshift(content)
 					state)
