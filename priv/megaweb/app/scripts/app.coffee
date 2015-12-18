@@ -135,7 +135,8 @@ document.addEventListener "DOMContentLoaded", (e) ->
 			when "notice" then notice(content)
 			when "message"
 				actor.cast((state) ->
-					if (state.data.logging and state.handlers.grep(content.app,state.data.grep_app) and state.handlers.grep(content.message,state.data.grep_log))
+					mess_content = JSON.stringify(content.message)
+					if (state.data.logging and state.handlers.grep(content.app,state.data.grep_app) and state.handlers.grep(mess_content,state.data.grep_log))
 						content.date = Date()
 						state.data.cache.stack.unshift(content)
 						do_render()

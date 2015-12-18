@@ -16353,7 +16353,7 @@ constants = {
       ],
       sidebar: false,
       showing_block: "main_page",
-      version: '0.0.1.31'
+      version: '0.0.1.33'
     };
   },
   colors: function() {
@@ -16558,7 +16558,9 @@ document.addEventListener("DOMContentLoaded", function(e) {
         return notice(content);
       case "message":
         return actor.cast(function(state) {
-          if (state.data.logging && state.handlers.grep(content.app, state.data.grep_app) && state.handlers.grep(content.message, state.data.grep_log)) {
+          var mess_content;
+          mess_content = JSON.stringify(content.message);
+          if (state.data.logging && state.handlers.grep(content.app, state.data.grep_app) && state.handlers.grep(mess_content, state.data.grep_log)) {
             content.date = Date();
             state.data.cache.stack.unshift(content);
             do_render();
