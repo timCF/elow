@@ -18,7 +18,8 @@ defmodule Elow.Mixfile do
 						:logger,
 						:silverb,
 						:myswt,
-						:wwwest
+						:wwwest,
+						:exutils
 					],
      mod: {Elow, []}]
   end
@@ -36,7 +37,8 @@ defmodule Elow.Mixfile do
 	[
 		{:silverb, github: "timCF/silverb"},
 		{:myswt, github: "timCF/myswt", branch: "megaweb"},
-		{:wwwest, github: "timCF/wwwest"}
+		{:wwwest, github: "timCF/wwwest"},
+		{:exutils, github: "timCF/exutils"}
 	]
   end
 end

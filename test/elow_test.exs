@@ -1,7 +1,7 @@
 defmodule ElowTest do
 	use ExUnit.Case
 	doctest Elow
-	@colors ["white","red","yellow","pre"]
+	@colors ["white","red","yellow","pre","json"]
 
 	@tag timeout: :timer.minutes(60)
 	test "the truth" do
@@ -10,7 +10,11 @@ defmodule ElowTest do
 	end
 
 	defp send_mess(n \\ 0) do
-		mess = %{cmd: "message", args: %{app: "elow", message: "hello\nworld\n#{n}", color: Enum.at(@colors,rem(n,length(@colors)))}} |> Jazz.encode!
+		mess = 	case Enum.at(@colors,rem(n,length(@colors))) do
+					color = "json" -> %{cmd: "message", args: %{app: "elow", message: %{hello: 1, world: n}, color: color}}
+					color -> %{cmd: "message", args: %{app: "elow", message: "hello\nworld\n#{n}", color: color}}
+				end
+				|> Jazz.encode!
 		[_,_,_,"ok"] = :os.cmd('curl -d \'#{mess}\' -u login:password http://127.0.0.1:8887') |> to_string |> String.split("\n")
 		:timer.sleep(500)
 		send_mess(n+1)

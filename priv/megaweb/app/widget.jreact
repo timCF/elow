@@ -25,8 +25,14 @@ div.row
 			div= "доступна : "+locals.handlers.get_last_version()
 div.container-fluid.padded(class=visibility)
 	each row in locals.data.cache.stack
-		if row.color == "pre"
-			pre.black.white= row.app+"\n"+row.date+"\n\n"+row.message
+		if row.color == "json"
+			div.row
+				div.col-md-12
+					div(id=row.uuid)
+		else if row.color == "pre"
+			div.row
+				div.col-md-12
+					pre.black.white= row.app+"\n"+row.date+"\n\n"+row.message
 		else
 			div.row(class= row.color)
 				div.col-md-12
