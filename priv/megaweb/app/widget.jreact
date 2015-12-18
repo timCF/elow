@@ -29,6 +29,7 @@ div.container-fluid.padded(class=visibility)
 			div.row
 				div.col-md-12
 					if row.color == "json"
+						p= row.app+" "+row.date+" json"
 						div(id=row.uuid)
 					else if row.color == "pre"
 						pre.black.white= row.app+"\n"+row.date+"\n\n"+row.message

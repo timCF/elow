@@ -16353,7 +16353,7 @@ constants = {
       ],
       sidebar: false,
       showing_block: "main_page",
-      version: '0.0.1.29'
+      version: '0.0.1.31'
     };
   },
   colors: function() {
@@ -16659,9 +16659,12 @@ module.exports = (function (React) {
             className: "col-md-12"
           } ].concat(function() {
             var tags = [];
-            "json" == row.color ? tags.push(React.createElement("div", {
-              id: row.uuid
-            })) : "pre" == row.color ? tags.push(React.createElement("pre", {
+            if ("json" == row.color) {
+              tags.push(React.createElement("p", {}, row.app + " " + row.date + " json"));
+              tags.push(React.createElement("div", {
+                id: row.uuid
+              }));
+            } else "pre" == row.color ? tags.push(React.createElement("pre", {
               className: "black white"
             }, row.app + "\n" + row.date + "\n\n" + row.message)) : tags.push(React.createElement("p", {
               className: jade_join_classes([ row.color ])
@@ -16681,9 +16684,12 @@ module.exports = (function (React) {
               className: "col-md-12"
             } ].concat(function() {
               var tags = [];
-              "json" == row.color ? tags.push(React.createElement("div", {
-                id: row.uuid
-              })) : "pre" == row.color ? tags.push(React.createElement("pre", {
+              if ("json" == row.color) {
+                tags.push(React.createElement("p", {}, row.app + " " + row.date + " json"));
+                tags.push(React.createElement("div", {
+                  id: row.uuid
+                }));
+              } else "pre" == row.color ? tags.push(React.createElement("pre", {
                 className: "black white"
               }, row.app + "\n" + row.date + "\n\n" + row.message)) : tags.push(React.createElement("p", {
                 className: jade_join_classes([ row.color ])
