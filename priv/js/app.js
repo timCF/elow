@@ -16353,7 +16353,7 @@ constants = {
       ],
       sidebar: false,
       showing_block: "main_page",
-      version: '0.0.1.229'
+      version: '0.0.1.29'
     };
   },
   colors: function() {
@@ -16561,11 +16561,12 @@ document.addEventListener("DOMContentLoaded", function(e) {
           if (state.data.logging && state.handlers.grep(content.app, state.data.grep_app) && state.handlers.grep(content.message, state.data.grep_log)) {
             content.date = Date();
             state.data.cache.stack.unshift(content);
-            state.data.cache.stack.forEach(function(subj) {
-              if (subj.color === "json") {
+            do_render();
+            state.data.cache.stack.forEach(function(this_subj) {
+              if (this_subj.color === "json") {
                 return new PrettyJSON.view.Node({
-                  el: $('#' + subj.uuid),
-                  data: subj.message
+                  el: $('#' + this_subj.uuid),
+                  data: this_subj.message
                 });
               }
             });
@@ -16650,57 +16651,45 @@ module.exports = (function (React) {
         var $$obj = locals.data.cache.stack;
         if ("number" == typeof $$obj.length) for (var $index = 0, $$l = $$obj.length; $$l > $index; $index++) {
           var row = $$obj[$index];
-          "json" == row.color ? tags.push(React.createElement("div", {
+          tags.push(React.createElement("div", {
+            className: "container-fluid padded_top"
+          }, React.createElement("div", {
             className: "row"
-          }, React.createElement("div", {
+          }, React.createElement.apply(React, [ "div", {
             className: "col-md-12"
-          }, React.createElement("div", {
-            id: row.uuid
-          })))) : "pre" == row.color ? tags.push(React.createElement("div", {
-            className: "row"
-          }, React.createElement("div", {
-            className: "col-md-12"
-          }, React.createElement("pre", {
-            className: "black white"
-          }, row.app + "\n" + row.date + "\n\n" + row.message)))) : tags.push(React.createElement("div", {
-            className: jade_join_classes([ "row", row.color ])
-          }, React.createElement("div", {
-            className: "col-md-12"
-          }, React.createElement("div", {
-            className: "inline"
-          }, React.createElement("p", {}, row.app)), React.createElement("div", {
-            className: "padded_left_wide inline"
-          }, React.createElement("p", {}, row.date)), React.createElement("div", {
-            className: "padded_left_wide inline"
-          }, React.createElement("p", {}, row.message)))));
+          } ].concat(function() {
+            var tags = [];
+            "json" == row.color ? tags.push(React.createElement("div", {
+              id: row.uuid
+            })) : "pre" == row.color ? tags.push(React.createElement("pre", {
+              className: "black white"
+            }, row.app + "\n" + row.date + "\n\n" + row.message)) : tags.push(React.createElement("p", {
+              className: jade_join_classes([ row.color ])
+            }, row.app + " " + row.date + " " + row.message));
+            return tags;
+          }.call(this))))));
         } else {
           var $$l = 0;
           for (var $index in $$obj) {
             $$l++;
             var row = $$obj[$index];
-            "json" == row.color ? tags.push(React.createElement("div", {
+            tags.push(React.createElement("div", {
+              className: "container-fluid padded_top"
+            }, React.createElement("div", {
               className: "row"
-            }, React.createElement("div", {
+            }, React.createElement.apply(React, [ "div", {
               className: "col-md-12"
-            }, React.createElement("div", {
-              id: row.uuid
-            })))) : "pre" == row.color ? tags.push(React.createElement("div", {
-              className: "row"
-            }, React.createElement("div", {
-              className: "col-md-12"
-            }, React.createElement("pre", {
-              className: "black white"
-            }, row.app + "\n" + row.date + "\n\n" + row.message)))) : tags.push(React.createElement("div", {
-              className: jade_join_classes([ "row", row.color ])
-            }, React.createElement("div", {
-              className: "col-md-12"
-            }, React.createElement("div", {
-              className: "inline"
-            }, React.createElement("p", {}, row.app)), React.createElement("div", {
-              className: "padded_left_wide inline"
-            }, React.createElement("p", {}, row.date)), React.createElement("div", {
-              className: "padded_left_wide inline"
-            }, React.createElement("p", {}, row.message)))));
+            } ].concat(function() {
+              var tags = [];
+              "json" == row.color ? tags.push(React.createElement("div", {
+                id: row.uuid
+              })) : "pre" == row.color ? tags.push(React.createElement("pre", {
+                className: "black white"
+              }, row.app + "\n" + row.date + "\n\n" + row.message)) : tags.push(React.createElement("p", {
+                className: jade_join_classes([ row.color ])
+              }, row.app + " " + row.date + " " + row.message));
+              return tags;
+            }.call(this))))));
           }
         }
         return tags;

@@ -11,7 +11,7 @@ defmodule ElowTest do
 
 	defp send_mess(n \\ 0) do
 		mess = 	case Enum.at(@colors,rem(n,length(@colors))) do
-					color = "json" -> %{cmd: "message", args: %{app: "elow", message: %{hello: 1, world: n}, color: color}}
+					color = "json" -> %{cmd: "message", args: %{app: "elow", message: %{hello: 1, world: n, qwe: [100,2000,3000,%{a: 1, b: [1,2,3], c: "qweqwe"}]}, color: color}}
 					color -> %{cmd: "message", args: %{app: "elow", message: "hello\nworld\n#{n}", color: color}}
 				end
 				|> Jazz.encode!

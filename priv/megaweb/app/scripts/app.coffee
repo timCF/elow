@@ -138,9 +138,10 @@ document.addEventListener "DOMContentLoaded", (e) ->
 					if (state.data.logging and state.handlers.grep(content.app,state.data.grep_app) and state.handlers.grep(content.message,state.data.grep_log))
 						content.date = Date()
 						state.data.cache.stack.unshift(content)
-						state.data.cache.stack.forEach((subj) ->
-							if (subj.color == "json")
-								(new PrettyJSON.view.Node({el: $('#'+subj.uuid), data: subj.message})))
+						do_render()
+						state.data.cache.stack.forEach((this_subj) ->
+							if (this_subj.color == "json")
+								(new PrettyJSON.view.Node({el: $('#'+this_subj.uuid), data: this_subj.message})))
 					state)
 			else
 				alert("subject : "+subject+" | content : "+content)
