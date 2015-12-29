@@ -16353,7 +16353,7 @@ constants = {
       ],
       sidebar: false,
       showing_block: "main_page",
-      version: '0.0.1.33'
+      version: '0.0.1.39'
     };
   },
   colors: function() {
@@ -16367,6 +16367,7 @@ constants = {
 
 init_state = {
   data: {
+    stack_size: 20,
     logging: true,
     grep_app: "",
     grep_log: "",
@@ -16563,6 +16564,7 @@ document.addEventListener("DOMContentLoaded", function(e) {
           if (state.data.logging && state.handlers.grep(content.app, state.data.grep_app) && state.handlers.grep(mess_content, state.data.grep_log)) {
             content.date = Date();
             state.data.cache.stack.unshift(content);
+            state.data.cache.stack = state.data.cache.stack.slice(0, state.data.stack_size);
             do_render();
             state.data.cache.stack.forEach(function(this_subj) {
               if (this_subj.color === "json") {
@@ -16643,6 +16645,18 @@ module.exports = (function (React) {
         tags = tags.concat(jade_mixins.opts_button_input.call(this, {}, "логгирование", [ "data", "logging" ]));
         return tags;
       }.call(this))), React.createElement("div", {
+        role: "group",
+        className: "padded_left btn-group"
+      }, React.createElement("div", {
+        className: "center"
+      }, "размер стека"), React.createElement("div", {}, React.createElement("input", {
+        type: "range",
+        min: "5",
+        max: "1000",
+        step: "1",
+        onChange: (jade_interp = locals.handlers, jade_interp.change_from_view.bind(jade_interp, [ "data", "stack_size" ])),
+        className: "black white"
+      }))), React.createElement("div", {
         role: "group",
         className: "padded_left btn-group"
       }, React.createElement("div", {}, "версия : " + locals.opts.version), React.createElement("div", {}, "доступна : " + locals.handlers.get_last_version())))));

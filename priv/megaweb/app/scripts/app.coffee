@@ -15,6 +15,7 @@ constants =
 
 init_state =
 	data: {
+		stack_size: 20,
 		logging: true,
 		grep_app: "",
 		grep_log: "",
@@ -139,6 +140,7 @@ document.addEventListener "DOMContentLoaded", (e) ->
 					if (state.data.logging and state.handlers.grep(content.app,state.data.grep_app) and state.handlers.grep(mess_content,state.data.grep_log))
 						content.date = Date()
 						state.data.cache.stack.unshift(content)
+						state.data.cache.stack = state.data.cache.stack.slice(0, state.data.stack_size)
 						do_render()
 						state.data.cache.stack.forEach((this_subj) ->
 							if (this_subj.color == "json")
