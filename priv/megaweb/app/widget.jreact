@@ -21,9 +21,9 @@ div.row
 		div.padded_left(class="btn-group" role="group")
 			+opts_button_input("логгирование", ["data","logging"])
 		div.padded_left(class="btn-group" role="group")
-			div.center= "размер стека"
+			div.center= "размер стека "+locals.data.stack_size
 			div
-				input.black.white(type="range" min="5" max="1000" step="1" onChange=locals.handlers.change_from_view(["data","stack_size"]))
+				input.black.white(type="range" min="5" max="500" step="1" value=locals.data.stack_size onChange=locals.handlers.change_from_view(["data","stack_size"]))
 		div.padded_left(class="btn-group" role="group")
 			div= "версия : "+locals.opts.version
 			div= "доступна : "+locals.handlers.get_last_version()

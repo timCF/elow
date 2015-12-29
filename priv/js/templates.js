@@ -110,7 +110,8 @@
   globals.require = require;
 })();
 require.register("index", function(exports, require, module) {
-module.exports = function anonymous(locals) {
+module.exports = function anonymous(locals
+/**/) {
 var buf = [];
 buf.push("<!DOCTYPE html5><html lang=\"ru\"><head><meta charset=\"utf-8\"/><meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf8\"/><title>Elow</title><link href=\"css/app.css\" rel=\"stylesheet\"/><script type=\"text/javascript\" src=\"js/app.js?\"></script><script type=\"text/javascript\">require(\"scripts/app\")</script></head></html><body><div id=\"main_frame\" class=\"container-fluid\"></div></body>");;return buf.join("");
 };

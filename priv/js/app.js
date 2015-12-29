@@ -16353,7 +16353,7 @@ constants = {
       ],
       sidebar: false,
       showing_block: "main_page",
-      version: '0.0.1.39'
+      version: '0.0.1.232'
     };
   },
   colors: function() {
@@ -16649,11 +16649,12 @@ module.exports = (function (React) {
         className: "padded_left btn-group"
       }, React.createElement("div", {
         className: "center"
-      }, "размер стека"), React.createElement("div", {}, React.createElement("input", {
+      }, "размер стека " + locals.data.stack_size), React.createElement("div", {}, React.createElement("input", {
         type: "range",
         min: "5",
-        max: "1000",
+        max: "500",
         step: "1",
+        value: locals.data.stack_size,
         onChange: (jade_interp = locals.handlers, jade_interp.change_from_view.bind(jade_interp, [ "data", "stack_size" ])),
         className: "black white"
       }))), React.createElement("div", {
