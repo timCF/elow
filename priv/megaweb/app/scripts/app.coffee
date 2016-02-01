@@ -16,7 +16,7 @@ constants =
 init_state =
 	data: {
 		stack_size: 20,
-		logging: true,
+		logging: false,
 		grep_app: "",
 		grep_log: "",
 		cache: {

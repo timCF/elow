@@ -16353,7 +16353,7 @@ constants = {
       ],
       sidebar: false,
       showing_block: "main_page",
-      version: '0.0.1.232'
+      version: '0.0.1.40'
     };
   },
   colors: function() {
@@ -16368,7 +16368,7 @@ constants = {
 init_state = {
   data: {
     stack_size: 20,
-    logging: true,
+    logging: false,
     grep_app: "",
     grep_log: "",
     cache: {
